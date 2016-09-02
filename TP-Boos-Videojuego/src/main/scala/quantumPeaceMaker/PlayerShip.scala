@@ -1,0 +1,5 @@
+package quantumPeaceMaker
+
+class PlayerShip {
+  
+}
