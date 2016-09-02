@@ -24,9 +24,11 @@ object QuantumShip extends RichGameComponent [QuantumPeaceMakerScene]{
       this.speed = (-speedMagnitude, 0.0)
     } else if (state.isKeyBeingHold(Key.RIGHT)) {
       this.speed = (speedMagnitude, 0.0)
-    } else {
-      this.speed = (0.0, 0.0)
-    }
+    } else if (state.isKeyBeingHold(Key.DOWN)){
+      this.speed = (0.0, speedMagnitude)
+    }else if (state.isKeyBeingHold(Key.UP)){
+      this.speed = (0.0, -speedMagnitude)
+    }else {this.speed = (0.0, 0.0)}
 
     this.position += this.speed * state.getDelta
   }
