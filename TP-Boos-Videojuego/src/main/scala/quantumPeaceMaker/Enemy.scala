@@ -54,7 +54,7 @@ class Enemy extends QuantumPeaceMakerComponent {
   }
 
   def reset() = {
-    this.position = (randomPosition(), QuantumPeaceMakerGame.height / 10.0)
+    this.position = (randomPosition(), -600.0)
     speed = initialSpeed
     this.setDestroyPending(false)
     this
