@@ -50,7 +50,9 @@ class QuantumShip(scene : QuantumPeaceMakerScene) extends RichGameComponent [Qua
    override def position_=(v:Vector2D) = super.position_=(QuantumPeaceMakerGame.bounds.limit(v, (this.getWidth.toDouble, this.getHeight.toDouble)))
 
    
- 
+  def getLaserWeapon(){
+     laserShotWeapon
+   }
    
   def center = {
     position + (Vector2D(this.getWidth, this.getHeight) * 0.5)

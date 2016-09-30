@@ -32,9 +32,6 @@ trait Weapon extends GameComponent[QuantumPeaceMakerScene] {
   def coolDownAndFire(delta: Double): Unit = {
     if (this.cooldown - delta <= 0) {
       this.doFire
-      this.doFire
-      this.doFire
-      this.doFire
       this.cooldown = coolDownTime
     }
   }

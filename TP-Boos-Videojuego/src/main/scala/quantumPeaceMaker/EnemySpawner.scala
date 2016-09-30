@@ -32,6 +32,7 @@ object EnemySpawner extends GameComponent[QuantumPeaceMakerScene] {
 
   def spawnEnemy() = {
     val enemy = new Enemy
+    ControllerTheCollision.addEnemy(enemy)
     this.getScene.addComponent(enemy.spawn())
   }
   
