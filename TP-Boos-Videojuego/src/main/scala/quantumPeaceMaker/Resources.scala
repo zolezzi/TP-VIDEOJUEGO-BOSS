@@ -11,11 +11,11 @@ object Resources {
   def spriteHeight = (200 * scale).toInt
   def spriteWidth = (200 * scale).toInt
   
-  val spriteExplosion = Sprite.fromImage("explosion.png").center()
+  //val spriteExplosion = Sprite.fromImage("explosion.png").center()
   
   val enemySprite = Sprite.fromImage("enemy.png").center()
   
-  val laserShotSprite = Sprite.fromImage("LaserShot.png").center()
+  val laserShotSprite = Sprite.fromImage("LaserShot.png")
   
 
 }

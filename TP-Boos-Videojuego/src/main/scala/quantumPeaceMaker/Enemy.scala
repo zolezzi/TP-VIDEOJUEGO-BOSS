@@ -4,15 +4,24 @@ import ar.pablitar.vainilla.commons.math.Vector2D
 import com.uqbar.vainilla.appearances.Circle
 import java.awt.Color
 import com.uqbar.vainilla.DeltaState
-import com.uqbar.vainilla.appearances.Rectangle
+//import com.uqbar.vainilla.appearances.Rectangle
 import ar.pablitar.vainilla.commons.math.Semiplane
 import com.uqbar.vainilla.events.constants.Key
-//import java.awt.Rectangle
+import java.awt.Rectangle
 
 class Enemy extends QuantumPeaceMakerComponent {
     
   val ancho = 50
   val alto = 50
+  
+  def sideWalls = List(
+    Semiplane(topLeft() + (8, 8), Vector2D(3.1, -1)),
+    Semiplane(topRight() + (-8, 8), Vector2D(-3.1, -1))
+  )
+  
+  def bottomWall = Semiplane(this.position + (0, -30), Vector2D(0, -1))
+  
+  def walls = bottomWall +: sideWalls
   
   
   //val diameter = 40
@@ -21,11 +30,11 @@ class Enemy extends QuantumPeaceMakerComponent {
 
   val x1 = this.position.x1.toInt
   val y1 = this.position.x2.toInt
- // var rec = new Rectangle(x1,y1,ancho,alto)
+  var rec = new Rectangle(x1,y1,ancho,alto)
 
-   // val enemySprite = Resources.enemySprite
- //   this.setAppearance(enemySprite)
-  this.setAppearance(new Rectangle(Color.BLUE, 50, 50))
+    val enemySprite = Resources.enemySprite
+    this.setAppearance(enemySprite)
+ // this.setAppearance(new Rectangle(Color.BLUE, 50, 50))
   
   val accelerationMagnitude = 800
   override var speed: Vector2D = initialSpeed
@@ -34,14 +43,19 @@ class Enemy extends QuantumPeaceMakerComponent {
 
   override def update(state: DeltaState) = {
     this.position += this.speed * state.getDelta
+    var xp =(this.position.x1.toInt)
+    var yp =(this.position.x2.toInt)
+    rec.setBounds(xp, yp, ancho, alto)
+    
 
+    if (this.isBelowTheScreen) {
+      this.destroy()
+    }
   }
 
 
   
-    if (this.isBelowTheScreen) {
-      this.destroy()
-    }
+
   
 
     
@@ -65,6 +79,7 @@ class Enemy extends QuantumPeaceMakerComponent {
   }
 
   override def destroy() {
+      ControllerTheCollision.removeEnemy(this)
 //    super.destroy()
 //    Enemy.despawn(this);
   }

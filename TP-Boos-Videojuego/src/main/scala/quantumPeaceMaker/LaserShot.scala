@@ -6,12 +6,19 @@ import ar.pablitar.vainilla.commons.components.SpeedyComponent
 import com.uqbar.vainilla.appearances.Circle
 import java.awt.Color
 import java.awt.Rectangle
+import com.uqbar.vainilla.colissions.CollisionDetector
+import ar.pablitar.vainilla.commons.math.Semiplane
+import ar.pablitar.vainilla.commons.math.PhysicsUtils
 
 class LaserShot(scene: QuantumPeaceMakerScene, x: Double, y: Double, xSpeed:Double) extends SpeedyComponent[QuantumPeaceMakerScene]{
 
   val ancho = 10
   val alto = 20
 
+  val diameter = 20
+  val radius = diameter.toDouble / 2
+  val collisionMargin = 30
+  
   //val pelotitas = new Circle(Color.YELLOW, 20)
   //val laserShot = new Rectangle(Color.BLACK, 10, 20)
   val laserShotSprite = Resources.laserShotSprite
@@ -26,16 +33,23 @@ class LaserShot(scene: QuantumPeaceMakerScene, x: Double, y: Double, xSpeed:Doub
  
   val x1 = this.position.x1.toInt
   val y1 = this.position.x2.toInt
- // var rec = new Rectangle(x1,y1,ancho,alto)
-  
+  var rec = new Rectangle(x1,y1,ancho,alto)
+
+  var ene = ControllerTheCollision.enemigos
   //asigna la velocidad de el disparo
   this.speed = (xSpeed, -400.0)
   
   override def update(state: DeltaState) = {
     super.update(state)
-    if (Collision.isCollisionE(this, ControllerTheCollision.enemigos)){
-      print("Hay collision")
-      getScene.removeComponent(this)
+    if (Collision.isCollisionE(this, ControllerTheCollision.enemigos.toList)){
+      println("Colision laser con nave")
+     // getScene.removeComponent(this)
+    }
+    for(enemy <- ControllerTheCollision.enemigos){
+      
+      if(isCollidedBy(enemy)){
+        print("Hay collision")
+      } 
     }
     applySpeed(state)
     if (isOutsideOfTheScreen){
@@ -48,5 +62,39 @@ class LaserShot(scene: QuantumPeaceMakerScene, x: Double, y: Double, xSpeed:Doub
   def isOutsideOfTheScreen: Boolean = {
     (this.position.x2 < -650)
   }
+  
+    def checkCollisionWithCatcherWalls() = {
+     for(enemy <- ControllerTheCollision.enemigos){ 
+        enemy.sideWalls.foreach {
+          this.checkCollisionWithWallAndRebound(_)
+    }
+
+    if (enemy.bottomWall.circuloPasoDetras(this.position, this.radius)) {
+      this.destroy()
+    }
+     }
+  }
+
+  def checkCollisionWithCatcher = {
+    for(enemy <- ControllerTheCollision.enemigos){
+      if (enemy.bottomWall.circuloPasoDetras(this.position, this.radius)) {
+        this.destroy()
+      }
+    }
+  }  
+    
+    
+  def checkCollisionWithWallAndRebound(wall: Semiplane) = {
+    if (wall.circuloPasoDetras(this.position, this.radius)) {
+      this.speed = PhysicsUtils.rebound(this.speed, wall.normal, 0.3)
+    }
+  }
+ 
+    
+    def isCollidedBy(enemy : Enemy) ={
+      CollisionDetector.INSTANCE.collidesCircleAgainstRect(this.position.x1 - radius, this.position.x2 - radius, this.radius,
+        enemy.topLeft().x1 + collisionMargin, enemy.topLeft().x2, enemy.ancho, this.radius)
+    }
+    
  
 }
