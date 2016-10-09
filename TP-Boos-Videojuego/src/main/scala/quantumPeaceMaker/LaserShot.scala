@@ -15,7 +15,7 @@ class LaserShot(scene: QuantumPeaceMakerScene, x: Double, y: Double, xSpeed:Doub
   val ancho = 10
   val alto = 20
 
-  val diameter = 20
+  val diameter = 40
   val radius = diameter.toDouble / 2
   val collisionMargin = 30
   
@@ -41,14 +41,13 @@ class LaserShot(scene: QuantumPeaceMakerScene, x: Double, y: Double, xSpeed:Doub
   
   override def update(state: DeltaState) = {
     super.update(state)
-    if (Collision.isCollisionE(this, ControllerTheCollision.enemigos.toList)){
-      println("Colision laser con nave")
-     // getScene.removeComponent(this)
-    }
+    
     for(enemy <- ControllerTheCollision.enemigos){
-      
-      if(isCollidedBy(enemy)){
-        print("Hay collision")
+      //if(Collision.hayColision(this, enemy)){
+      if(this.isCollidedBy(enemy)){
+       // if(enemy != null && this != null){
+          enemy.hasbeenHitBy(this)
+          this.destroy()
       } 
     }
     applySpeed(state)
@@ -93,8 +92,20 @@ class LaserShot(scene: QuantumPeaceMakerScene, x: Double, y: Double, xSpeed:Doub
     
     def isCollidedBy(enemy : Enemy) ={
       CollisionDetector.INSTANCE.collidesCircleAgainstRect(this.position.x1 - radius, this.position.x2 - radius, this.radius,
-        enemy.topLeft().x1 + collisionMargin, enemy.topLeft().x2, enemy.ancho, this.radius)
+        enemy.topLeft().x1, enemy.topLeft().x2, enemy.ancho, this.radius)
     }
     
- 
+    
+    override def destroy() {
+    // ControllerTheCollision.removeEnemy(this)
+     super.destroy()
+     //laserShot.despawn(this);
+  }
+ /*   
+    def eleminarSi(enemy : Enemy){
+      if(enemy != null && this != null){
+        getScene.removeComponent(enemy)
+        getScene.removeComponent(this)       
+      }
+    }*/
 }

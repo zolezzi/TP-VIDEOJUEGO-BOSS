@@ -8,20 +8,25 @@ import com.uqbar.vainilla.DeltaState
 import ar.pablitar.vainilla.commons.math.Semiplane
 import com.uqbar.vainilla.events.constants.Key
 import java.awt.Rectangle
+import java.awt.Graphics2D
+import ar.pablitar.vainilla.commons.inspectors.MathInspector
 
 class Enemy extends QuantumPeaceMakerComponent {
     
   val ancho = 50
   val alto = 50
-  
+  private var _showDebug = false
+  override def showDebug = _showDebug
+  def showDebug_=(value: Boolean) = _showDebug = value
+ 
   def sideWalls = List(
     Semiplane(topLeft() + (8, 8), Vector2D(3.1, -1)),
     Semiplane(topRight() + (-8, 8), Vector2D(-3.1, -1))
   )
   
-  def bottomWall = Semiplane(this.position + (0, -30), Vector2D(0, -1))
+  def bottomWall = Semiplane(this.position, Vector2D(ancho, alto))
   
-  def walls = bottomWall +: sideWalls
+//  def walls = bottomWall +: sideWalls
   
   
   //val diameter = 40
@@ -46,18 +51,15 @@ class Enemy extends QuantumPeaceMakerComponent {
     var xp =(this.position.x1.toInt)
     var yp =(this.position.x2.toInt)
     rec.setBounds(xp, yp, ancho, alto)
-    
+    this.showDebug = !this.showDebug
+    if(state.isKeyPressed(Key.D)) {
+      this.showDebug = !this.showDebug
+    }
 
     if (this.isBelowTheScreen) {
       this.destroy()
     }
   }
-
-
-  
-
-  
-
     
   def randomPosition() = {
     //CatchTheBallGame.width.toDouble / 2
@@ -80,8 +82,8 @@ class Enemy extends QuantumPeaceMakerComponent {
 
   override def destroy() {
       ControllerTheCollision.removeEnemy(this)
-//    super.destroy()
-//    Enemy.despawn(this);
+      super.destroy()
+      //Enemy.despawn(this);
   }
 
   def reset() = {
@@ -91,71 +93,20 @@ class Enemy extends QuantumPeaceMakerComponent {
     this
   }
 
-  
-  
-    def spawn() = {
-     new Enemy()
-    }
-
-/*
-  var collision = false
-
-  this.speed = (Random.nextInt(800), 0)
-
-  override val acceleration = Some(Vector2D(0, 1000))
-
-  def laser = this.getScene.player.getLaserWeapon
-
-  override def update(state: DeltaState) = {
-    super.update(state)
-    if (this.isCollisionBy(laser) && !colision) {
-      this.hayColision() // hayColision
-      this.getScene.sumScore
-      laser.caught(this) // laser.eliminarNave(this)
-    } else if (colisiono) {
-      this.checkCollisionWithCollisionWalls()
-    } else {
-      this.checkIfBelowTheScreen()
+    override def render(graphics: Graphics2D) = {
+    super.render(graphics)
+    if(showDebug) {
+      graphics.drawRect(this.topLeft().x1.toInt + 30, this.topLeft().x2.toInt + 10, this.width.toInt -30 * 2, 20)
+   //   walls.foreach { w => MathInspector.renderSemiplane(graphics, w) }
     }
   }
   
-  def sprite = Resources.spriteSemilla 
   
-  this.setAppearance(sprite)
-  val collisionMargin = 30
-
-
-  def isCollisionBy(catcher: Catcher) = {
-    CollisionDetector.INSTANCE
-      .collidesCircleAgainstRect(
-        this.position.x1 - radius, this.position.x2 - radius, this.radius,
-        catcher.topLeft().x1 + collisionMargin, catcher.topLeft().x2 + 10, catcher.width - collisionMargin * 2, this.radius)
+  def spawn() = {
+    new Enemy()
   }
 
-  def hayColision() = {
-    this.setZ(-2)
-    this.catched = true
+  def hasbeenHitBy(arg: LaserShot) = {
+   this.destroy()
   }
-
-  def checkCollisionWithCollisionWalls() = {
-    catcher.sideWalls.foreach {
-      this.checkCollisionWithWallAndRebound(_)
-    }
-
-    if (catcher.bottomWall.circuloPasoDetras(this.position, this.radius)) {
-      this.destroy()
-    }
-  }
-
-  def checkCollisionWithWallAndRebound(wall: Semiplane) = {
-    if (wall.circuloPasoDetras(this.position, this.radius)) {
-      this.speed = PhysicsUtils.rebound(this.speed, wall.normal, 0.3)
-    }
-  }
-
-  def checkIfBelowTheScreen() = {
-    if (this.position.x2 > 650)
-      this.destroy()
-  }*/
-
 }

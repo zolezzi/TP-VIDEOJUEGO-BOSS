@@ -49,13 +49,5 @@ object Collision extends GameComponent[QuantumPeaceMakerScene] {
      val bottom2 = rec2.getHeight + rec1.getY
 
     (rec1.getX <= rec2.getX && rec2.getX < right1 || rec2.getX <= rec1.getX && rec1.getX < right2) && (rec1.getY <= rec2.getY && rec2.getY < bottom1 || rec2.getY <= rec1.getY && rec1.getY < bottom2)
-     
-/*    double right1 = x1 + width1;
-		double right2 = x2 + width2;
-		double bottom1 = y1 + height1;
-		double bottom2 = y2 + height2;
-
-		return (x1 <= x2 && x2 < right1 || x2 <= x1 && x1 < right2)
-				&& (y1 <= y2 && y2 < bottom1 || y2 <= y1 && y1 < bottom2);*/
    }
 }

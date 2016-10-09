@@ -15,7 +15,11 @@ object Resources {
   
   val enemySprite = Sprite.fromImage("enemy.png").center()
   
-  val laserShotSprite = Sprite.fromImage("LaserShot.png")
+  val laserShotSprite = Sprite.fromImage("LaserShot.png").center()
   
-
+  val quantumShip = Sprite.fromImage("QuantumShip.png").center()
+  
+  val planetSprite = Sprite.fromImage("planet.png").center()
+  
+  
 }

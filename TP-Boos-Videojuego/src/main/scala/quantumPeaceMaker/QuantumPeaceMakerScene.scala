@@ -1,19 +1,15 @@
 package quantumPeaceMaker
 
 import com.uqbar.vainilla.GameScene
+import com.uqbar.vainilla.Game
 
-class QuantumPeaceMakerScene extends GameScene{
+class QuantumPeaceMakerScene(game : Game) extends GameScene{
+  
+  this.setGame(game)
+  this.addComponent(new StarFieldBackground(this, game))
   
   val player = new QuantumShip(this)
-  val n1 = new Enemy
-  val n2 = new Enemy
-  val n3 = new Enemy
-  
-  ControllerTheCollision.addEnemy(n1)
-  ControllerTheCollision.addEnemy(n2)
-  ControllerTheCollision.addEnemy(n3)
-  
-  val n = ControllerTheCollision.enemigos.size
+
   
   this.addComponent(EnemySpawner)
   this.addComponent(player)
