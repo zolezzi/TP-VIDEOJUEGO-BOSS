@@ -24,5 +24,6 @@ object Resources {
   
   val laserSound = new SoundBuilder().buildSound(this.getClass.getClassLoader.getResourceAsStream("laser.wav"))
   
+  val backgroundSound = new SoundBuilder().buildSound(this.getClass.getClassLoader.getResourceAsStream("backgroundSound.wav"))
   
 }

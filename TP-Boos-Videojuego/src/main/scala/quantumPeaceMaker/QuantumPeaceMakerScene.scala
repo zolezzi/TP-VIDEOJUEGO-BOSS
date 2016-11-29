@@ -13,4 +13,6 @@ class QuantumPeaceMakerScene(game : Game) extends GameScene{
   
   this.addComponent(EnemySpawner)
   this.addComponent(player)
+  
+  Resources.backgroundSound.play()
 }
