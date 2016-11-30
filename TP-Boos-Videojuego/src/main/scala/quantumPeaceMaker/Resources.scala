@@ -26,4 +26,6 @@ object Resources {
   
   val backgroundSound = new SoundBuilder().buildSound(this.getClass.getClassLoader.getResourceAsStream("backgroundSound.wav"))
   
+  val explosion = new SoundBuilder().buildSound(this.getClass.getClassLoader.getResourceAsStream("explosion.wav"))
+  
 }

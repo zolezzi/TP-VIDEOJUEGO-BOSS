@@ -108,5 +108,6 @@ class Enemy extends QuantumPeaceMakerComponent {
 
   def hasbeenHitBy(arg: LaserShot) = {
    this.destroy()
+   Resources.explosion.play()
   }
 }
